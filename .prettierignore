@@ -22,6 +22,7 @@ storybook-static
 build/locale-display-names.json
 build/country-display-names.json
 build/compact-locales/**/*.json
+release/**
 
 # Third-party files
 node_modules/**
