@@ -81,6 +81,7 @@ export type PropsDataType = {
   hasAutoDownloadUpdate: boolean;
   hasAutoLaunch: boolean;
   hasCallNotifications: boolean;
+  hasReplyNotification: boolean;
   hasCallRingtoneNotification: boolean;
   hasCountMutedConversations: boolean;
   hasHideMenuBar?: boolean;
@@ -179,6 +180,7 @@ type PropsFunctionType = {
   onNotificationAttentionChange: CheckboxChangeHandlerType;
   onNotificationContentChange: SelectChangeHandlerType<NotificationSettingType>;
   onNotificationsChange: CheckboxChangeHandlerType;
+  onRepliesShouldNotifyChange: CheckboxChangeHandlerType;
   onRelayCallsChange: CheckboxChangeHandlerType;
   onSelectedCameraChange: SelectChangeHandlerType<string | undefined>;
   onSelectedMicrophoneChange: SelectChangeHandlerType<AudioDevice | undefined>;
@@ -262,6 +264,7 @@ export function Preferences({
   hasAutoDownloadUpdate,
   hasAutoLaunch,
   hasCallNotifications,
+  hasReplyNotification,
   hasCallRingtoneNotification,
   hasCountMutedConversations,
   hasHideMenuBar,
@@ -312,6 +315,7 @@ export function Preferences({
   onNotificationAttentionChange,
   onNotificationContentChange,
   onNotificationsChange,
+  onRepliesShouldNotifyChange,
   onRelayCallsChange,
   onSelectedCameraChange,
   onSelectedMicrophoneChange,
@@ -1110,6 +1114,13 @@ export function Preferences({
             moduleClassName="Preferences__checkbox"
             name="notifications"
             onChange={onNotificationsChange}
+          />
+          <Checkbox
+            checked={hasReplyNotification}
+            label={i18n('icu:showNotificationsForReplies')}
+            moduleClassName="Preferences__checkbox"
+            name="shouldRepliesNotify"
+            onChange={onRepliesShouldNotifyChange}
           />
           <Checkbox
             checked={hasCallNotifications}

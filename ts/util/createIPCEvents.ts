@@ -69,6 +69,7 @@ export type IPCEventsValuesType = {
   incomingCallNotification: boolean;
   lastSyncTime: number | undefined;
   notificationDrawAttention: boolean;
+  shouldRepliesNotify: boolean;
   notificationSetting: NotificationSettingType;
   preferredAudioInputDevice: AudioDevice | undefined;
   preferredAudioOutputDevice: AudioDevice | undefined;
@@ -298,6 +299,11 @@ export function createIPCEvents(
       });
     },
 
+    getShouldRepliesNotify: () =>
+      window.storage.get('hasReplyNotification', false),
+    setShouldRepliesNotify: async (value: boolean) => {
+      await window.storage.put('hasReplyNotification', value);
+    },
     getHasStoriesDisabled: () =>
       window.storage.get('hasStoriesDisabled', false),
     setHasStoriesDisabled: async (value: boolean) => {
