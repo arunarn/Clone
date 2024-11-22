@@ -190,7 +190,7 @@ export function Lightbox({
 
   const handleJumpToConversation = useCallback(
     (
-      event: KeyboardEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      _event: KeyboardEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
       if (isViewOnce) {
         return;
@@ -828,7 +828,7 @@ function LightboxHeader({
   i18n: LocalizerType;
   message: ReadonlyDeep<MediaItemMessageType>;
 }): JSX.Element {
-  const conversation = getConversation(message.conversationId);
+  const conversation = getConversation(message.authorId);
 
   const now = Date.now();
 
