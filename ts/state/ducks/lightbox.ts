@@ -40,6 +40,7 @@ import {
 import { showStickerPackPreview } from './globalModals';
 import { useBoundActions } from '../../hooks/useBoundActions';
 import { DataReader } from '../../sql/Client';
+import { MessageModel } from '../../models/messages';
 
 // eslint-disable-next-line local-rules/type-alias-readonlydeep
 export type LightboxStateType =
@@ -196,6 +197,8 @@ function showLightboxForViewOnceMedia(
 
     const { contentType } = tempAttachment;
 
+    const authorId = getAuthorId(message);
+
     const media = [
       {
         attachment: tempAttachment,
@@ -208,6 +211,7 @@ function showLightboxForViewOnceMedia(
           attachments: message.get('attachments') || [],
           id: message.get('id'),
           conversationId: message.get('conversationId'),
+          authorId,
           receivedAt: message.get('received_at'),
           receivedAtMs: Number(message.get('received_at_ms')),
           sentAt: message.get('sent_at'),
@@ -226,6 +230,16 @@ function showLightboxForViewOnceMedia(
       },
     });
   };
+}
+
+function getAuthorId(message: MessageModel) {
+  return (
+    window.ConversationController.lookupOrCreate({
+      serviceId: message.get('sourceServiceId'),
+      e164: message.get('source'),
+      reason: 'conversation_view.showLightBox',
+    })?.id || message.get('conversationId')
+  );
 }
 
 function filterValidAttachments(
@@ -278,12 +292,8 @@ function showLightbox(opts: {
     const attachments = filterValidAttachments(message.attributes);
     const loop = isGIF(attachments);
 
-    const authorId =
-      window.ConversationController.lookupOrCreate({
-        serviceId: message.get('sourceServiceId'),
-        e164: message.get('source'),
-        reason: 'conversation_view.showLightBox',
-      })?.id || message.get('conversationId');
+    const authorId = getAuthorId(message);
+    const conversationId = message.get('conversationId');
     const receivedAt = message.get('received_at');
     const sentAt = message.get('sent_at');
 
@@ -296,7 +306,8 @@ function showLightbox(opts: {
       message: {
         attachments: message.get('attachments') || [],
         id: messageId,
-        conversationId: authorId,
+        conversationId,
+        authorId,
         receivedAt,
         receivedAtMs: Number(message.get('received_at_ms')),
         sentAt,
